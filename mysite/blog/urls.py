@@ -7,7 +7,7 @@ urlpatterns = [
     # post views
     path('', views.post_list, name='post_list'),
     path(
-    '<int:year>/<int:month>/<int:day>/<slug:post>/',
+    '<int:year>/<int:month>/<int:day>/<slug:publish>/',
     views.post_detail,
     name='post_detail'
 ),
