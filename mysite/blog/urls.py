@@ -5,7 +5,7 @@ from . import views
 app_name = 'blog'
 urlpatterns = [
     # post views
-    path('', views.post_list, name='post_list'),
+    path('', views.Postlistview.as_view(), name='post_list'),
     path(
     '<int:year>/<int:month>/<int:day>/<slug:publish>/',
     views.post_detail,
