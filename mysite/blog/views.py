@@ -6,16 +6,32 @@ from django.http import Http404
 from .forms import EmailPostForm,CommentForm
 from .models import Post,Comment
 from django.core.mail import send_mail
+from taggit.models import Tag
 
 
-class Postlistview(ListView):
-    
-    queryset=Post.published.all()
-    context_object_name='posts'
-    paginate_by=3
-    template_name='blog/post/list.html'
+class PostListView(ListView):
 
+    model = Post
+    context_object_name = 'posts'
+    paginate_by = 3
+    template_name = 'blog/post/list.html'
 
+    def get_queryset(self):
+        queryset = Post.published.all()
+        self.tag = None
+
+        tag_slug = self.kwargs.get('tag_slug')
+
+        if tag_slug:
+            self.tag = get_object_or_404(Tag, slug=tag_slug)
+            queryset = queryset.filter(tags__in=[self.tag])
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+        return context
 def post_detail(request, year, month, day, publish):
  
     post = get_object_or_404(
@@ -41,6 +57,7 @@ def post_comment(request,post_id):
         id=post_id,
         status=Post.Status.PUBLISHED
     )
+    comment=None
     form=CommentForm(data=request.POST)
     if form.is_valid:
         comment=form.save(commit=False)
