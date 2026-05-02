@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,9 +27,13 @@ SECRET_KEY = 'django-insecure-zxiahb@_3%@#u+2##rrb&!bb=cejpg37lshycu#u3tzn_d0n)z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Allow LAN testing during development while keeping production explicit.
+ALLOWED_HOSTS = ["*"] if DEBUG else [
+    host.strip()
+    for host in config("ALLOWED_HOSTS", default="").split(",")
+    if host.strip()
+]
 
-SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,11 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.sites',
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
     'taggit',
-     'blog.apps.BlogConfig',
+    'sslserver',
+    'blog.apps.BlogConfig',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +131,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-from decouple import config
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')

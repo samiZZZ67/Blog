@@ -3,6 +3,7 @@ from django.views.generic import ListView
 from django.shortcuts import render,get_object_or_404
 from django.views.decorators.http import require_POST
 from django.http import Http404
+from django.urls import reverse
 from .forms import EmailPostForm,CommentForm
 from .models import Post,Comment
 from django.core.mail import send_mail
@@ -124,6 +125,15 @@ def post_share(request,post_id):
         'post':post,
         'sent':sent}
 
+    )
+
+
+def feed_subscribe(request):
+    feed_url = request.build_absolute_uri(reverse('blog:post_feed'))
+    return render(
+        request,
+        'blog/post/subscribe.html',
+        {'feed_url': feed_url}
     )
 
 

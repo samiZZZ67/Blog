@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Subscribe{% endblock %}
+
+{% block content %}
+<section class="subscribe-panel">
+  <p class="eyebrow">RSS Subscription</p>
+  <h1>Follow new posts without checking the blog manually.</h1>
+  <p class="subscribe-intro">
+    This feed works with RSS readers like Feedly, Inoreader, and any app that accepts a feed URL.
+  </p>
+
+  <div class="feed-url-card">
+    <p class="label">Your RSS feed URL</p>
+    <code id="feed-url">{{ feed_url }}</code>
+  </div>
+
+  <div class="subscribe-actions">
+    <a class="button-primary" href="{{ feed_url }}">Open RSS XML</a>
+    <a class="button-secondary" href="{% url 'blog:post_list' %}">Back to blog</a>
+  </div>
+
+  <div class="subscribe-steps">
+    <h2>How to use it</h2>
+    <ol>
+      <li>Copy the feed URL above.</li>
+      <li>Paste it into your RSS reader's "Add feed" or "Subscribe" field.</li>
+      <li>Save it, and new posts will appear there automatically.</li>
+    </ol>
+  </div>
+
+  <div class="subscribe-note">
+    <strong>Why the XML page exists:</strong>
+    the raw RSS feed is meant for feed readers, so seeing plain XML there is normal.
+  </div>
+</section>
+{% endblock %}

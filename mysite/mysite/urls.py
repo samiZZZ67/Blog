@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.sitemaps.views import sitemap
+from django.views.generic import RedirectView
 from blog.sitemaps import PostSitemap
 
 sitemaps = {
@@ -26,6 +27,8 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls', namespace='blog')),
+    path('blog/feed', RedirectView.as_view(url='/subscribe/', permanent=False)),
+    path('blog/feed/', RedirectView.as_view(url='/subscribe/', permanent=False)),
     path(
         'sitemap.xml',
         sitemap,
